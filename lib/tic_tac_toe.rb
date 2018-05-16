@@ -14,7 +14,7 @@ class TicTacToe
     @board = [" ", " ", " ", " ", " ", " ", " ", " ", " "]
   end
   
-  def display_board(board)
+  def display_board
     puts " #{@board[0]} | #{@board[1]} | #{@board[2]} "
     puts "-----------"
     puts " #{@board[3]} | #{@board[4]} | #{@board[5]} "
@@ -26,35 +26,35 @@ class TicTacToe
     return input.to_i - 1
   end
   
-  def move(board, index, token)
+  def move(index, token)
     @board[index] = token
   end
   
-  def position_taken?(board, index)
+  def position_taken?(index)
     !(@board[index].nil? || @board[index] == " ")
   end
   
-  def valid_move?(board, index)
-    if position_taken?(board, index) || !index.between?(0, 8)
+  def valid_move?(index)
+    if position_taken?(index) || !index.between?(0, 8)
       return false
     end
     return true
   end
   
-  def turn(board)
+  def turn
     puts "Please enter 1-9:"
     index = input_to_index(gets.strip)
-    while !valid_move?(board, index)
+    while !valid_move?(index)
       puts "Please enter 1-9:"
       index = input_to_index(gets.strip)
     end
-    move(board, index, current_player(board))
-    display_board(board)
+    move(index, current_player)
+    display_board
   end
   
-  def turn_count(board)
+  def turn_count
     counter = 0
-    board.each do |place| 
+    @board.each do |place| 
       if place == "X" || place == "O"
         counter += 1
       end
@@ -62,11 +62,11 @@ class TicTacToe
     return counter
   end
   
-  def current_player(board)
-    return (turn_count(board) % 2 == 0) ? "X" : "O"
+  def current_player
+    return (turn_count(@board) % 2 == 0) ? "X" : "O"
   end
   
-  def won?(board)
+  def won?
     WIN_COMBINATIONS.each do |win_combination|
       win_index_1 = win_combination[0]
       win_index_2 = win_combination[1]
@@ -85,30 +85,30 @@ class TicTacToe
     return false
   end
 
-  def full?(board)
-    return !(board.any? { |element| element == " " })
+  def full?
+    return !(@board.any? { |element| element == " " })
   end
       
-  def draw?(board)
-    return !won?(board) && full?(board)
+  def draw?
+    return !won? && full?
   end
   
-  def over?(board)
-    return won?(board) || draw?(board)
+  def over?
+    return won?|| draw?
   end
   
-  def winner(board)
-    if win_combination = won?(board)
-      board [win_combination[0]]
+  def winner
+    if win_combination = won?
+      @board[win_combination[0]]
     end
   end
   
-  def play(board)
-    until over?(board)
-      turn(board)
+  def play
+    until over?
+      turn
     end
-    if won?(board)
-      puts "Congratulations #{winner(board)}!"
+    if won?
+      puts "Congratulations #{winner}!"
     else
       puts "Cat's Game!"
     end
