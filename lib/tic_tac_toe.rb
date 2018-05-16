@@ -63,7 +63,7 @@ class TicTacToe
   end
   
   def current_player
-    return (turn_count(@board) % 2 == 0) ? "X" : "O"
+    return (turn_count % 2 == 0) ? "X" : "O"
   end
   
   def won?
